@@ -1,6 +1,6 @@
 import os
 import requests
-from flask import jsonify,send_from_directory, jsonify, request
+from flask import Flask, send_from_directory, jsonify, request
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 app = Flask(
