@@ -1,1 +1,5 @@
-# ...existing code...
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#0d1117"/>
+  <text x="3" y="23" font-family="Arial Black,sans-serif" font-size="17" font-weight="900" fill="#f2c040">T</text>
+  <text x="14" y="23" font-family="Arial Black,sans-serif" font-size="17" font-weight="900" fill="#eef2f7">IQ</text>
+</svg>
