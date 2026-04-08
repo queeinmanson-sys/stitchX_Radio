@@ -3,100 +3,281 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>StitchX Radio — Race Intelligence Platform</title>
-<link rel="icon" href="static/assets/favicon.svg" type="image/svg+xml"/>
-<link rel="stylesheet" href="static/css/main.css"/>
+<title>ThermoIQ — Race Intelligence Platform</title>
+  <link rel="icon" href="static/assets/favicon.svg" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="static/css/main.css"/>
 </head>
 <body>
 <div class="app">
-  <!-- ─── TOPBAR ─────────────────────────────────────────── -->
-  <div class="tb">
-    <div class="logo">
-      <div class="logo-mark">StitchX <em>Radio</em></div>
-      <div class="logo-sub">Race Intelligence Platform</div>
+
+<!-- ─── TOPBAR ─── -->
+<div class="tb">
+  <div class="logo" onclick="topNav('race',this)">
+    <div class="logo-mark">Thermo<em>IQ</em></div>
+    <div class="logo-sub">Race Intelligence</div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="topNav('race',this)">
+      <div class="tab-dot" style="background:var(--red)"></div>Live Race
     </div>
-    <div class="tabs">
-      <div class="tab on" onclick="topNav('race')" title="View live race simulation and GC standings">
-        <div class="tab-dot" style="background:var(--red)"></div>Live Race
-      </div>
-      <div class="tab" onclick="topNav('fan')" title="Fan predictions, social feed, and equipment analysis">
-        <div class="tab-dot" style="background:var(--gold)"></div>Fan Zone
-      </div>
-      <div class="tab" onclick="topNav('uci')" title="NFC scan simulation and compliance workflows">
-        <div class="tab-dot" style="background:var(--uci2)"></div>UCI Officials
-      </div>
-      <div class="tab" onclick="topNav('mfr')" title="Manufacturer KPIs, compliance heatmap, and exports">
-        <div class="tab-dot" style="background:var(--amber)"></div>Manufacturers
-      </div>
-      <div class="tab" onclick="topNav('demo')" id="tab-demo" title="How to use this demo and what makes StitchX Radio unique">
-        <div class="tab-dot" style="background:var(--cyan)"></div>Demo Guide
-      </div>
+    <div class="tab" onclick="topNav('fan',this)">
+      <div class="tab-dot" style="background:var(--gold)"></div>Fan Zone
     </div>
-    <div class="tb-right">
-      <div class="stage-badge" title="Current stage and route">Stage 12 · Girona → Montserrat · 178 km</div>
-      <div class="clock-badge" id="clock" title="Race time">4:22:18</div>
-      <div class="live-badge" title="Live race is in progress"><span class="live-dot"></span>Live</div>
-      <button id="pitch-btn" class="pitch-btn" title="Investor Pitch & Business Case">Pitch</button>
+    <div class="tab" onclick="topNav('uci',this)">
+      <div class="tab-dot" style="background:var(--uci2)"></div>UCI Officials
     </div>
-  <!-- Investor Pitch Modal -->
-  <div id="pitch-modal" class="modal-bg" style="display:none;">
-    <div class="modal">
-      <button class="modal-close" onclick="document.getElementById('pitch-modal').style.display='none'">&times;</button>
-      <h2>StitchX Radio — Investor Pitch</h2>
-      <h3>Business Case & Moat</h3>
-      <ul style="margin:16px 0 18px 18px;line-height:1.7;font-size:16px;">
-        <li>Only platform linking equipment, compliance, and race results in real time.</li>
-        <li>Trusted by teams, brands, and event organizers for compliance and analytics.</li>
-        <li>Commercial insights drive new revenue for all stakeholders.</li>
-      </ul>
-      <h3>Commercial Product Tiers</h3>
-      <table class="pitch-table">
-        <tr><th>Product</th><th>Who Buys</th><th>Price</th></tr>
-        <tr><td>UCI Compliance SaaS</td><td>Race organisations</td><td>€80,000 / year</td></tr>
-        <tr><td>Broadcaster Data Pack</td><td>TV / streaming</td><td>€45,000 / race</td></tr>
-        <tr><td>Manufacturer Intelligence</td><td>Brands</td><td>€12,000 / season</td></tr>
-        <tr><td>Team Analytics Suite</td><td>Pro teams</td><td>€8,000 / season</td></tr>
-        <tr><td>Component Brand Reports</td><td>Helmet, wheel, tyre brands</td><td>€5,000 / season</td></tr>
-        <tr><td>Fan Prediction Platform</td><td>Fans (B2C)</td><td>€2 / user / month</td></tr>
-      </table>
-      <div style="margin-top:22px;">
-        <a href="/static/assets/StitchX_Pitch.pdf" download class="download-pitch">Download Pitch PDF</a>
-      </div>
+    <div class="tab" onclick="topNav('mfr',this)">
+      <div class="tab-dot" style="background:var(--amber)"></div>Manufacturers
     </div>
   </div>
+  <div class="tb-right">
+    <div class="stage-badge" id="stage-badge">Stage 12 · Girona → Montserrat · 178 km</div>
+    <div class="clock-badge" id="clock">4:22:18</div>
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
+  </div>
+</div>
+
+<div class="ws">
+
+<!-- ══════════════════════════════════════════
+     LIVE RACE PANE
+══════════════════════════════════════════ -->
+<div class="pane on" id="pane-race">
+
+  <div class="race-left">
+    <!-- elevation profile / stage map -->
+    <div class="stage-map">
+      <div class="sm-title">
+        <span>Stage profile</span>
+        <span style="color:var(--gold)">KM <span id="km-marker">142</span></span>
+      </div>
+      <div class="map-svg-wrap">
+        <svg id="stage-svg" viewBox="0 0 280 90" preserveAspectRatio="none">
+          <!-- elevation path -->
+          <path class="elevation-path" d="M0,80 C20,78 40,70 60,60 C80,50 90,40 110,30 C125,22 135,18 150,14 C165,10 175,15 190,25 C205,35 215,45 230,55 C245,65 260,70 280,72 L280,90 L0,90 Z"/>
+          <path fill="none" stroke="var(--uci2)" stroke-width="1.5" d="M0,80 C20,78 40,70 60,60 C80,50 90,40 110,30 C125,22 135,18 150,14 C165,10 175,15 190,25 C205,35 215,45 230,55 C245,65 260,70 280,72"/>
+          <!-- KOM marker -->
+          <line x1="150" y1="8" x2="150" y2="80" stroke="var(--gold2)" stroke-width=".8" stroke-dasharray="3,2"/>
+          <text x="152" y="12" class="km-label" font-size="7" fill="var(--gold)">KOM</text>
+          <!-- distance markers -->
+          <text x="2" y="88" class="km-label">0</text>
+          <text x="130" y="88" class="km-label">89km</text>
+          <text x="268" y="88" class="km-label">178</text>
+          <!-- rider dots will be injected -->
+          <g id="rider-dots"></g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- GC standings -->
+    <div class="gc-header">
+      <div>
+        <div class="gc-title">GC Standings</div>
+        <div class="gc-subtitle">Overall · Stage 12</div>
+      </div>
+    </div>
+    <div class="gc-list" id="gc-list"></div>
   </div>
 
-  <div class="ws">
-    <!-- ...existing panes... -->
-    <div class="pane" id="pane-demo">
-      <div style="padding:32px 24px;max-width:600px;margin:auto;">
-        <h2>Welcome to the <span style="color:#00bcd4">StitchX Radio</span> Demo Guide</h2>
-        <ul style="margin:18px 0 24px 18px;line-height:1.7;font-size:16px;">
-          <li><b>Live Race:</b> See real-time race simulation, GC standings, and compliance.</li>
-          <li><b>Fan Zone:</b> Explore predictions, social feeds, and equipment analytics.</li>
-          <li><b>UCI Officials:</b> Simulate NFC scans and compliance workflows.</li>
-          <li><b>Manufacturers:</b> View compliance heatmaps, KPIs, and export data.</li>
-        </ul>
-        <h3>What Makes StitchX Radio Unique?</h3>
-        <ul style="margin:18px 0 24px 18px;line-height:1.7;font-size:16px;">
-          <li>Links equipment, compliance, and race results in one platform.</li>
-          <li>Real-time analytics and compliance for every bike and rider.</li>
-          <li>Commercial insights for teams, brands, and event organizers.</li>
-        </ul>
-        <h3>How to Use</h3>
-        <ul style="margin:18px 0 24px 18px;line-height:1.7;font-size:16px;">
-          <li>Click tabs above to explore each view.</li>
-          <li>Try the NFC scan, make predictions, and export reports.</li>
-          <li>Use the Feedback button to share your thoughts!</li>
-        </ul>
+  <div class="race-main">
+    <!-- top stats bar -->
+    <div class="race-top-bar">
+      <div class="rtb-stat"><div class="rtb-val" id="rtb-km" style="color:var(--gold)">36</div><div class="rtb-label">km to go</div></div>
+      <div class="rtb-sep"></div>
+      <div class="rtb-stat"><div class="rtb-val" id="rtb-speed">44.2</div><div class="rtb-label">km/h avg</div></div>
+      <div class="rtb-sep"></div>
+      <div class="rtb-stat"><div class="rtb-val" id="rtb-gap" style="color:var(--red)">1:14</div><div class="rtb-label">break gap</div></div>
+      <div class="rtb-sep"></div>
+      <div class="rtb-stat"><div class="rtb-val">Stage 12</div><div class="rtb-label">Girona → Montserrat</div></div>
+      <div class="rtb-sep"></div>
+      <div class="rtb-stat"><div class="rtb-val" style="font-size:14px;font-family:var(--fm);color:var(--white3)">Click rider</div><div class="rtb-label">for detail</div></div>
+    </div>
+
+    <!-- rider spotlight -->
+    <div class="rider-spot" id="rider-spot">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;opacity:.3">
+        <div style="font-size:40px">🚴</div>
+        <div style="font-family:var(--fd);font-size:18px;margin-top:8px;letter-spacing:.06em">Select a rider from GC standings</div>
       </div>
     </div>
   </div>
 </div>
-<!-- Floating Feedback Button -->
-<a href="https://forms.gle/your-feedback-form" target="_blank" id="feedback-btn" title="Send us your feedback, suggestions, or questions!">&#128172; Feedback</a>
+
+<!-- ══════════════════════════════════════════
+     FAN ZONE PANE
+══════════════════════════════════════════ -->
+<div class="pane" id="pane-fan">
+
+  <div class="fan-left">
+    <div class="fan-left-header">
+      <div class="fh-title">Stage Prediction</div>
+      <div class="fh-sub">AI model · based on rider history, bike & conditions</div>
+    </div>
+
+    <!-- prediction card -->
+    <div class="pred-card">
+      <div class="pred-label">✦ Predicted stage winner</div>
+      <div class="pred-winner" id="pred-winner">T. Pogačar</div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-top:2px">
+        <div class="pred-prob" id="pred-prob">68%</div>
+        <div class="pred-sub">win probability</div>
+      </div>
+      <div class="pred-factors" id="pred-factors"></div>
+    </div>
+
+    <!-- pick your winner -->
+    <div style="padding:0 14px 6px;font-family:var(--fm);font-size:8px;color:var(--white3);letter-spacing:.1em;text-transform:uppercase">Your pick</div>
+    <div class="pick-row" id="pick-row"></div>
+
+    <!-- social feed -->
+    <div class="social-feed">
+      <div class="sf-header">
+        <span>Race feed</span>
+        <span style="color:var(--green);animation:pulse 1s infinite">● Live</span>
+      </div>
+      <div id="social-feed-list"></div>
+    </div>
+  </div>
+
+  <div class="fan-main">
+    <!-- why they won -->
+    <div class="why-card" id="why-card"></div>
+
+    <!-- equipment performance -->
+    <div class="equip-winners">
+      <div style="font-family:var(--fd);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px">Equipment performance — 2026 season</div>
+      <div style="font-family:var(--fm);font-size:8px;color:var(--white3);margin-bottom:2px">Stage wins by equipment brand · click any to see details</div>
+      <div class="ew-grid" id="ew-grid"></div>
+    </div>
+
+    <!-- image analysis -->
+    <div class="img-analysis">
+      <div class="ia-header">
+        <div class="ia-title">📷 Race image / video analysis</div>
+        <div style="font-family:var(--fm);font-size:8px;color:var(--white3)">Upload race photo to identify equipment</div>
+      </div>
+      <div class="ia-body">
+        <div class="ia-drop" id="ia-drop" ondragover="dzov(event,'ia-drop')" ondragleave="dzou('ia-drop')" ondrop="dzdp(event)">
+          <div class="ia-drop-icon">📷</div>
+          <div class="ia-drop-txt">Drop race photo<br/>or click</div>
+          <input type="file" accept="image/*,video/*" onchange="analyseRaceImg(event)"/>
+        </div>
+        <img class="ia-img-preview" id="ia-preview"/>
+        <div class="ia-result" id="ia-result">
+          Drop a race photo or video frame to identify:<br/>
+          <span class="ia-tag">🚲 Bike model</span>
+          <span class="ia-tag">⛑ Helmet brand</span>
+          <span class="ia-tag">🔵 Wheel type</span>
+          <span class="ia-tag">👕 Kit / jersey</span>
+          <span class="ia-tag">🥽 Sunglasses</span>
+          <span class="ia-tag">👟 Shoes</span>
+          <span class="ia-tag">🧤 Gloves</span>
+          <span class="ia-tag">📡 Power meter</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     UCI OFFICIALS PANE
+══════════════════════════════════════════ -->
+<div class="pane" id="pane-uci">
+  <div class="uci-left">
+    <div class="nfc-zone">
+      <div class="nfc-label">NFC Tag Scanner</div>
+      <div class="nfc-scanner" id="nfc-scanner" onclick="startScan()">
+        <div class="nfc-icon">📡</div>
+        <div class="nfc-status" id="nfc-status">Ready to scan</div>
+        <div class="nfc-sub" id="nfc-sub">Tap to simulate NFC read</div>
+      </div>
+    </div>
+    <div class="scan-progress"><div class="scan-bar" id="scan-bar"></div></div>
+    <div class="manual-entry">
+      <div class="nfc-label" style="margin-bottom:5px">Manual entry</div>
+      <div class="me-row">
+        <input class="me-inp" id="me-inp" placeholder="044B536AD71F90" onkeydown="if(event.key==='Enter')manualScan()"/>
+        <button class="me-btn" onclick="manualScan()">Load</button>
+      </div>
+    </div>
+    <div class="scan-hist">
+      <div class="sh-label">Recent scans</div>
+      <div id="scan-hist-list"></div>
+    </div>
+  </div>
+
+  <div class="uci-main">
+    <div class="flow-bar">
+      <div class="fstep" id="fs1"><div class="fsn">1</div><div class="fsl">Scan</div></div>
+      <div class="fb-arrow">›</div>
+      <div class="fstep" id="fs2"><div class="fsn">2</div><div class="fsl">Compliance</div></div>
+      <div class="fb-arrow">›</div>
+      <div class="fstep" id="fs3"><div class="fsn">3</div><div class="fsl">Report</div></div>
+      <div class="fb-arrow">›</div>
+      <div class="fstep" id="fs4"><div class="fsn">4</div><div class="fsl">Export</div></div>
+    </div>
+    <div class="uci-body" id="uci-body">
+      <div class="uci-empty" id="uci-empty">
+        <div class="ue-icon">📡</div>
+        <div class="ue-title">Awaiting NFC scan</div>
+        <div class="ue-sub">Scan a tag or enter ID manually</div>
+        <div class="qt-row">
+          <div class="qt" onclick="loadTag('044B536AD71F90')">044B536AD71F90</div>
+          <div class="qt" onclick="loadTag('044C721BF82A01')">044C721BF82A01</div>
+          <div class="qt" onclick="loadTag('044D890CE93B12')">044D890CE93B12</div>
+          <div class="qt" onclick="loadTag('044E105DF04C23')">044E105DF04C23</div>
+          <div class="qt" onclick="loadTag('0450441FH26E45')">0450441FH26E45</div>
+        </div>
+      </div>
+      <div id="uci-result" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MANUFACTURERS PANE
+══════════════════════════════════════════ -->
+<div class="pane" id="pane-mfr">
+  <div class="mfr-top">
+    <div>
+      <div class="mfr-title">Equipment Intelligence Dashboard</div>
+      <div class="mfr-sub" id="mfr-sub">All manufacturers · Stage 12 · Live</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="filter-bar" id="mfr-filter-bar"></div>
+      <button onclick="exportCSV()" style="font-family:var(--fm);font-size:8px;padding:4px 10px;border:1px solid var(--amber);border-radius:var(--r);cursor:pointer;background:transparent;color:var(--amber);letter-spacing:.06em;text-transform:uppercase">↓ Export</button>
+    </div>
+  </div>
+  <div class="mfr-body">
+    <div class="kpi-row" id="kpi-row"></div>
+    <div style="font-family:var(--fm);font-size:8px;color:var(--white3);letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px">Compliance heatmap · click to inspect</div>
+    <div class="hm-grid" id="hm-grid"></div>
+
+    <!-- what to sell section -->
+    <div style="font-family:var(--fd);font-size:16px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;color:var(--white2)">Commercial opportunities</div>
+    <div class="sell-grid" id="sell-grid"></div>
+
+    <div class="fleet-wrap">
+      <div class="ft-hd">
+        <div class="ft-title">Fleet registry</div>
+        <div style="display:flex;gap:5px">
+          <div class="td-btn" onclick="toast('Refreshed')">↻ Refresh</div>
+          <div class="td-btn" style="border-color:var(--amber);color:var(--amber)" onclick="exportCSV()">↓ CSV</div>
+        </div>
+      </div>
+      <table><thead><tr>
+        <th>Tag ID</th><th>Manufacturer / Model</th><th>Team</th><th>Rider</th>
+        <th>Compliance</th><th>Stage wins</th><th>Equipment score</th><th></th>
+      </tr></thead><tbody id="fleet-tbody"></tbody></table>
+    </div>
+    <div class="evt-list" id="evt-list"></div>
+  </div>
+</div>
+
+</div></div>
 <div id="toast"></div>
-<!-- Scripts: main.js contains all app logic and data -->
+
 <script src="static/js/main.js"></script>
 </body>
 </html>
