@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>StitchX Radio — Race Intelligence Platform</title>
+<link rel="icon" href="static/assets/favicon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="static/css/main.css"/>
+</head>
+<body>
+<div class="app">
+  <!-- ─── TOPBAR ─────────────────────────────────────────── -->
+  <div class="tb">
+    <div class="logo">
+      <div class="logo-mark">StitchX <em>Radio</em></div>
+      <div class="logo-sub">Race Intelligence Platform</div>
+    </div>
+    <div class="tabs">
+      <div class="tab on" onclick="topNav('race')" title="View live race simulation and GC standings">
+        <div class="tab-dot" style="background:var(--red)"></div>Live Race
+      </div>
+      <div class="tab" onclick="topNav('fan')" title="Fan predictions, social feed, and equipment analysis">
+        <div class="tab-dot" style="background:var(--gold)"></div>Fan Zone
+      </div>
+      <div class="tab" onclick="topNav('uci')" title="NFC scan simulation and compliance workflows">
+        <div class="tab-dot" style="background:var(--uci2)"></div>UCI Officials
+      </div>
+      <div class="tab" onclick="topNav('mfr')" title="Manufacturer KPIs, compliance heatmap, and exports">
+        <div class="tab-dot" style="background:var(--amber)"></div>Manufacturers
+      </div>
+      <div class="tab" onclick="topNav('demo')" id="tab-demo" title="How to use this demo and what makes StitchX Radio unique">
+        <div class="tab-dot" style="background:var(--cyan)"></div>Demo Guide
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="stage-badge" title="Current stage and route">Stage 12 · Girona → Montserrat · 178 km</div>
+      <div class="clock-badge" id="clock" title="Race time">4:22:18</div>
+      <div class="live-badge" title="Live race is in progress"><span class="live-dot"></span>Live</div>
+      <button id="pitch-btn" class="pitch-btn" title="Investor Pitch & Business Case">Pitch</button>
+    </div>
+  <!-- Investor Pitch Modal -->
+  <div id="pitch-modal" class="modal-bg" style="display:none;">
+    <div class="modal">
+      <button class="modal-close" onclick="document.getElementById('pitch-modal').style.display='none'">&times;</button>
+      <h2>StitchX Radio — Investor Pitch</h2>
+      <h3>Business Case & Moat</h3>
+      <ul style="margin:16px 0 18px 18px;line-height:1.7;font-size:16px;">
+        <li>Only platform linking equipment, compliance, and race results in real time.</li>
+        <li>Trusted by teams, brands, and event organizers for compliance and analytics.</li>
+        <li>Commercial insights drive new revenue for all stakeholders.</li>
+      </ul>
+      <h3>Commercial Product Tiers</h3>
+      <table class="pitch-table">
+        <tr><th>Product</th><th>Who Buys</th><th>Price</th></tr>
+        <tr><td>UCI Compliance SaaS</td><td>Race organisations</td><td>€80,000 / year</td></tr>
+        <tr><td>Broadcaster Data Pack</td><td>TV / streaming</td><td>€45,000 / race</td></tr>
+        <tr><td>Manufacturer Intelligence</td><td>Brands</td><td>€12,000 / season</td></tr>
+        <tr><td>Team Analytics Suite</td><td>Pro teams</td><td>€8,000 / season</td></tr>
+        <tr><td>Component Brand Reports</td><td>Helmet, wheel, tyre brands</td><td>€5,000 / season</td></tr>
+        <tr><td>Fan Prediction Platform</td><td>Fans (B2C)</td><td>€2 / user / month</td></tr>
+      </table>
+      <div style="margin-top:22px;">
+        <a href="/static/assets/StitchX_Pitch.pdf" download class="download-pitch">Download Pitch PDF</a>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="ws">
+    <!-- ...existing panes... -->
+    <div class="pane" id="pane-demo">
+      <div style="padding:32px 24px;max-width:600px;margin:auto;">
+        <h2>Welcome to the <span style="color:#00bcd4">StitchX Radio</span> Demo Guide</h2>
+        <ul style="margin:18px 0 24px 18px;line-height:1.7;font-size:16px;">
+          <li><b>Live Race:</b> See real-time race simulation, GC standings, and compliance.</li>
+          <li><b>Fan Zone:</b> Explore predictions, social feeds, and equipment analytics.</li>
+          <li><b>UCI Officials:</b> Simulate NFC scans and compliance workflows.</li>
+          <li><b>Manufacturers:</b> View compliance heatmaps, KPIs, and export data.</li>
+        </ul>
+        <h3>What Makes StitchX Radio Unique?</h3>
+        <ul style="margin:18px 0 24px 18px;line-height:1.7;font-size:16px;">
+          <li>Links equipment, compliance, and race results in one platform.</li>
+          <li>Real-time analytics and compliance for every bike and rider.</li>
+          <li>Commercial insights for teams, brands, and event organizers.</li>
+        </ul>
+        <h3>How to Use</h3>
+        <ul style="margin:18px 0 24px 18px;line-height:1.7;font-size:16px;">
+          <li>Click tabs above to explore each view.</li>
+          <li>Try the NFC scan, make predictions, and export reports.</li>
+          <li>Use the Feedback button to share your thoughts!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Floating Feedback Button -->
+<a href="https://forms.gle/your-feedback-form" target="_blank" id="feedback-btn" title="Send us your feedback, suggestions, or questions!">&#128172; Feedback</a>
+<div id="toast"></div>
+<!-- Scripts: main.js contains all app logic and data -->
+<script src="static/js/main.js"></script>
+</body>
+</html>

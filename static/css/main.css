@@ -1,0 +1,285 @@
+/* --- Modal Styles --- */
+.modal-bg {
+	position: fixed;
+	top: 0; left: 0; right: 0; bottom: 0;
+	background: rgba(34,43,50,0.72);
+	z-index: 2000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.modal {
+	background: #232b32;
+	color: #fff;
+	border-radius: 14px;
+	box-shadow: 0 8px 48px rgba(0,0,0,0.28);
+	padding: 38px 38px 32px 38px;
+	max-width: 480px;
+	width: 96vw;
+	position: relative;
+}
+.modal-close {
+	position: absolute;
+	top: 12px;
+	right: 18px;
+	background: none;
+	border: none;
+	color: #fff;
+	font-size: 28px;
+	cursor: pointer;
+	opacity: 0.7;
+	transition: opacity 0.18s;
+}
+.modal-close:hover {
+	opacity: 1;
+}
+.pitch-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 12px 0 0 0;
+}
+.pitch-table th, .pitch-table td {
+	border: 1px solid #334;
+	padding: 7px 10px;
+	font-size: 15px;
+}
+.pitch-table th {
+	background: #00bcd4;
+	color: #fff;
+	font-weight: 700;
+}
+.download-pitch {
+	display: inline-block;
+	margin-top: 10px;
+	background: #00bcd4;
+	color: #fff;
+	padding: 10px 18px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: background 0.18s;
+}
+.download-pitch:hover {
+	background: #0097a7;
+}
+.pitch-btn {
+	background: #00bcd4;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	padding: 8px 18px;
+	font-size: 15px;
+	font-weight: 700;
+	margin-left: 12px;
+	cursor: pointer;
+	transition: background 0.18s, box-shadow 0.18s;
+	box-shadow: 0 2px 12px rgba(0,188,212,0.12);
+}
+.pitch-btn:hover {
+	background: #0097a7;
+	box-shadow: 0 4px 18px rgba(0,188,212,0.22);
+}
+/* --- Tooltip Styles --- */
+[title] {
+	position: relative;
+}
+[title]:hover::after {
+	content: attr(title);
+	position: absolute;
+	left: 50%;
+	bottom: 120%;
+	transform: translateX(-50%);
+	background: rgba(34, 43, 50, 0.97);
+	color: #fff;
+	font-size: 12px;
+	padding: 7px 14px;
+	border-radius: 7px;
+	white-space: pre-line;
+	pointer-events: none;
+	opacity: 1;
+	z-index: 9999;
+	box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+[title]:hover::before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	bottom: 110%;
+	transform: translateX(-50%);
+	border: 7px solid transparent;
+	border-top-color: rgba(34, 43, 50, 0.97);
+	z-index: 9999;
+}
+/* --- Mobile Responsiveness --- */
+@media (max-width: 900px) {
+	.app {
+		min-width: 0;
+		width: 100vw;
+		height: 100vh;
+	}
+	.ws {
+		flex-direction: column;
+		overflow: auto;
+	}
+	.pane {
+		min-width: 0;
+		width: 100vw;
+		flex: 1;
+		padding: 0 0 60px 0;
+	}
+	.tb {
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 10px 8px 0 8px;
+		gap: 8px;
+	}
+	.tabs {
+		flex-wrap: wrap;
+		gap: 2px;
+		width: 100%;
+	}
+	.tab {
+		min-width: 90px;
+		font-size: 13px;
+		padding: 8px 10px 7px 10px;
+	}
+	.tb-right {
+		flex-direction: row;
+		gap: 6px;
+		margin-left: 0;
+		font-size: 11px;
+	}
+	.logo-mark {
+		font-size: 18px;
+	}
+	.logo-sub {
+		font-size: 8px;
+	}
+}
+
+@media (max-width: 600px) {
+	.app {
+		min-width: 0;
+		width: 100vw;
+		height: 100vh;
+	}
+	.ws {
+		flex-direction: column;
+		overflow: auto;
+	}
+	.pane {
+		min-width: 0;
+		width: 100vw;
+		flex: 1;
+		padding: 0 0 60px 0;
+	}
+	.tb {
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 8px 4px 0 4px;
+		gap: 6px;
+	}
+	.tabs {
+		flex-wrap: wrap;
+		gap: 1px;
+		width: 100%;
+	}
+	.tab {
+		min-width: 70px;
+		font-size: 12px;
+		padding: 7px 6px 6px 6px;
+	}
+	.tb-right {
+		flex-direction: row;
+		gap: 4px;
+		margin-left: 0;
+		font-size: 10px;
+	}
+	.logo-mark {
+		font-size: 15px;
+	}
+	.logo-sub {
+		font-size: 7px;
+	}
+	#feedback-btn {
+		right: 12px;
+		bottom: 12px;
+		font-size: 13px;
+		padding: 10px 14px 10px 12px;
+	}
+}
+/* ...existing code... */
+
+/* --- Floating Feedback Button --- */
+#feedback-btn {
+	position: fixed;
+	right: 28px;
+	bottom: 28px;
+	z-index: 1000;
+	background: linear-gradient(90deg, #00bcd4 0%, #0097a7 100%);
+	color: #fff;
+	font-family: var(--fd, 'Barlow');
+	font-size: 16px;
+	font-weight: 600;
+	padding: 13px 22px 13px 18px;
+	border-radius: 99px;
+	box-shadow: 0 4px 24px rgba(0,188,212,0.18);
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+	border: none;
+	outline: none;
+}
+#feedback-btn:hover {
+	background: linear-gradient(90deg, #0097a7 0%, #00bcd4 100%);
+	box-shadow: 0 8px 32px rgba(0,188,212,0.28);
+	transform: translateY(-2px) scale(1.06);
+	color: #fff;
+}
+
+/* --- Demo Guide Tab Highlight --- */
+.tab-dot[style*="--cyan"] {
+	box-shadow: 0 0 0 2px #00bcd4;
+}
+
+/* --- Modern Tab Polish --- */
+.tabs .tab {
+	transition: color 0.18s, border-bottom 0.18s, background 0.18s;
+	padding: 10px 22px 8px 18px;
+	border-radius: 12px 12px 0 0;
+	margin-right: 2px;
+	background: rgba(0,188,212,0.03);
+}
+.tabs .tab:hover {
+	color: #00bcd4;
+	border-bottom: 2px solid #00bcd4;
+	background: rgba(0,188,212,0.08);
+}
+.tabs .tab.on {
+	color: #f2c040;
+	border-bottom: 2px solid #f2c040;
+	background: #222b32;
+}
+
+/* --- Logo Polish --- */
+.logo-mark {
+	font-family: var(--fd, 'Barlow');
+	font-size: 24px;
+	font-weight: 800;
+	letter-spacing: .14em;
+	color: #00bcd4;
+}
+.logo-mark em {
+	color: #f2c040;
+	font-style: normal;
+}
+.logo-sub {
+	font-family: var(--fm, 'Barlow');
+	font-size: 10px;
+	color: #fff;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	margin-left: 2px;
+}
