@@ -1,21 +1,3 @@
-"""
-StitchX Radio — Race Intelligence Platform
-backend/server.py
-
-Flask backend for NFC compliance, race data, equipment intelligence.
-
-Run:
-    pip install flask flask-cors
-    python backend/server.py
-    → http://127.0.0.1:8765
-
-Then open index.html via:
-    python -m http.server 5500 --directory .
-    open http://localhost:5500
-"""
-# ...existing code...
-
-# --- Hugging Face Sentiment Analysis Proxy Endpoint ---
 import os
 import requests
 from flask import jsonify,send_from_directory, jsonify, request
