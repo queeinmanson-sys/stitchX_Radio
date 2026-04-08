@@ -18,7 +18,18 @@ Then open index.html via:
 # --- Hugging Face Sentiment Analysis Proxy Endpoint ---
 import os
 import requests
-from flask import jsonify
+from flask import jsonify,send_from_directory, jsonify, request
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+app = Flask(
+    __name__,
+    static_folder=os.path.join(BASE_DIR, "static"),
+    static_url_path="/static"
+)
+
+@app.route("/")
+def home():
+    return send_from_directory(BASE_DIR, "index.html")
 
 HF_API_KEY = os.environ.get('HF_API_KEY')  # Set this in your environment for security
 HF_MODEL = 'distilbert-base-uncased-finetuned-sst-2-english'
