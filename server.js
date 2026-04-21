@@ -22,14 +22,6 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
-});
-
 app.get("/now-playing", (req, res) => {
   res.json({
     title: "SoundHelix Song 1",
