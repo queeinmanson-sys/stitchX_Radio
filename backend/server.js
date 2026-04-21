@@ -4,6 +4,13 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+let raceState = {
+  gap: 74,
+  avgSpeed: 44.2,
+  kmToGo: 36,
+  inspectionsClear: true
+};
+
 app.use(cors());
 app.use(express.json());
 
@@ -26,30 +33,66 @@ app.get("/stream", (req, res) => {
 });
 
 app.get("/insights", (req, res) => {
+  const { gap, avgSpeed, kmToGo, inspectionsClear } = raceState;
+
+  // 🔥 Race dynamics logic
+  let raceLine1 = gap > 60
+    ? `Breakaway gap stable at ${Math.floor(gap / 60)}:${(gap % 60).toString().padStart(2, "0")}`
+    : "Peloton closing in on breakaway";
+
+  let raceLine2 = avgSpeed > 45
+    ? "High pace detected across peloton"
+    : "Controlled pace before key climb";
+
+  // 🔥 Rider focus logic
+  let riderLine1 = kmToGo < 20
+    ? "GC riders preparing for final attacks"
+    : "GC leader holding position in peloton";
+
+  let riderLine2 = "No mechanical or inspection flags detected";
+
+  // 🔥 Equipment logic
+  let equipmentLine1 = inspectionsClear
+    ? "All scanned bikes compliant"
+    : "Inspection alerts detected";
+
+  let equipmentLine2 = inspectionsClear
+    ? "No UCI inspection alerts"
+    : "Review required for flagged bikes";
+
+  // 🔥 Live alert logic
+  let alertLine1 = gap < 60
+    ? "Breakaway under pressure"
+    : "Stable race conditions";
+
+  let alertLine2 = kmToGo < 15
+    ? "Final race phase approaching"
+    : "Monitoring race dynamics";
+
   res.json({
     raceDynamics: {
       label: "RACE DYNAMICS",
       accent: "yellow",
-      line1: "Breakaway gap stable at 1:14",
-      line2: "Peloton maintaining controlled pace before KOM"
+      line1: raceLine1,
+      line2: raceLine2
     },
     riderFocus: {
       label: "RIDER FOCUS",
       accent: "blue",
-      line1: "GC leader holding position in peloton",
-      line2: "No mechanical or inspection flags detected"
+      line1: riderLine1,
+      line2: riderLine2
     },
     equipmentStatus: {
       label: "EQUIPMENT STATUS",
       accent: "green",
-      line1: "All scanned bikes compliant",
-      line2: "No UCI inspection alerts"
+      line1: equipmentLine1,
+      line2: equipmentLine2
     },
     liveAlert: {
       label: "LIVE ALERT",
       accent: "red",
-      line1: "Speed increase detected in chase group",
-      line2: "Potential break catch within 12 km"
+      line1: alertLine1,
+      line2: alertLine2
     }
   });
 });
