@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 let raceState = {
-  gap: 74,
+  gap: 30,
   avgSpeed: 44.2,
   kmToGo: 36,
   inspectionsClear: true
