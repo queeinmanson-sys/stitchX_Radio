@@ -22,6 +22,22 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.get("/now-playing", (req, res) => {
+  res.json({
+    title: "SoundHelix Song 1",
+    artist: "Demo Stream",
+    live: true
+  });
+});
+
 app.get("/stream", (req, res) => {
   res.redirect("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
 });
