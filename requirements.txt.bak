@@ -1,0 +1,10 @@
+# Renamed from requirements.txt to requirements.txt.bak
+# This prevents Railpack from detecting Python and building a Python environment.
+# The Railway service root is set to /backend (Node.js/Express).
+# To restore Python detection, rename this file back to requirements.txt.
+
+flask>=3.0.0
+flask-cors>=4.0.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+gunicorn>=21.2.0
