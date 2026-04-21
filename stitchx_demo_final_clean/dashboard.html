@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./config.js"></script>
+  <title>StitchX Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .badge {
+      background: #334155;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .stats {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .stat {
+      background: #1e293b;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    select, input {
+      padding: 6px;
+      border-radius: 6px;
+      border: none;
+      background: #1e293b;
+      color: #fff;
+    }
+    .card {
+      background: #1e293b;
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    .label {
+      color: #94a3b8;
+    }
+    .PASS { color: #22c55e; }
+    .FAIL { color: #ef4444; }
+    .WARNING { color: #f59e0b; }
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <h1>StitchX Dashboard</h1>
+  <div class="badge" id="count">0</div>
+</div>
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">PASS: <span id="pass">0</span></div>
+  <div class="stat">FAIL: <span id="fail">0</span></div>
+  <div class="stat">WARNING: <span id="warning">0</span></div>
+  <div class="stat">Compliance: <span id="compliance">0%</span></div>
+</div>
+<!-- FILTERS -->
+<div class="filters">
+  <select id="filterResult">
+    <option value="">All Results</option>
+    <option value="PASS">PASS</option>
+    <option value="FAIL">FAIL</option>
+    <option value="WARNING">WARNING</option>
+  </select>
+  <input id="filterRider" placeholder="Search rider">
+  <input id="filterEvent" placeholder="Search event">
+</div>
+<!-- LIST -->
+<div id="list"></div>
+<script>
+let ALL = [];
+const BACKEND_URL = window.STITCHX_CONFIG?.BACKEND_URL || 'http://localhost:3000';
+async function load() {
+  const res = await fetch(`${BACKEND_URL}/inspections`);
+  ALL = await res.json();
+  applyFilters();
+}
+function applyFilters() {
+  const resultFilter = document.getElementById('filterResult').value;
+  const riderFilter = document.getElementById('filterRider').value.toLowerCase();
+  const eventFilter = document.getElementById('filterEvent').value.toLowerCase();
+  let filtered = ALL.filter(i => {
+    const r = (i.overall_result || '').toUpperCase();
+    const rider = (i.rider || '').toLowerCase();
+    const event = (i.event_name || '').toLowerCase();
+    return (
+      (!resultFilter || r === resultFilter) &&
+      (!riderFilter || rider.includes(riderFilter)) &&
+      (!eventFilter || event.includes(eventFilter))
+    );
+  });
+  render(filtered);
+}
+function render(data) {
+  const list = document.getElementById('list');
+  const count = document.getElementById('count');
+  list.innerHTML = '';
+  count.innerText = data.length + ' inspections';
+  let pass = 0, fail = 0, warning = 0;
+  data.forEach(i => {
+    const result = i.overall_result || 'PASS';
+    if (result === 'PASS') pass++;
+    if (result === 'FAIL') fail++;
+    if (result === 'WARNING') warning++;
+    const card = `
+      <div class="card">
+        <div class="row">
+          <div><strong>${i.rider || ''}</strong></div>
+          <div class="${result}">${result}</div>
+        </div>
+        <div class="row">
+          <div class="label">Bike</div>
+          <div>${i.bike_brand || ''} ${i.frame_model || ''}</div>
+        </div>
+        <div class="row">
+          <div class="label">Team</div>
+          <div>${i.team || ''}</div>
+        </div>
+        <div class="row">
+          <div class="label">Event</div>
+          <div>${i.event_name || ''}</div>
+        </div>
+        <div class="row">
+          <div class="label">Time</div>
+          <div>${new Date(i.created_at).toLocaleString()}</div>
+        </div>
+      </div>
+    `;
+    list.innerHTML += card;
+  });
+  const total = pass + fail + warning;
+  const compliance = total ? Math.round((pass / total) * 100) : 0;
+  document.getElementById('pass').innerText = pass;
+  document.getElementById('fail').innerText = fail;
+  document.getElementById('warning').innerText = warning;
+  document.getElementById('compliance').innerText = compliance + '%';
+}
+document.getElementById('filterResult').onchange = applyFilters;
+document.getElementById('filterRider').oninput = applyFilters;
+document.getElementById('filterEvent').oninput = applyFilters;
+load();
+setInterval(load, 4000);
+</script>
+</body>
+</html>
