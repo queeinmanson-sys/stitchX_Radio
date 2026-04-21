@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StitchX Race Intelligence</title>
+  <link rel="stylesheet" href="./main.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand" onclick="topNav('race')">
+        <div class="brand-title">Stitch<em>X</em></div>
+        <div class="brand-sub" id="brand-sub">Race Intelligence</div>
+      </div>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="race" onclick="topNav('race')">Live Race</button>
+        <button class="tab" data-tab="fan" onclick="topNav('fan')">Fan Zone</button>
+        <button class="tab" data-tab="uci" onclick="topNav('uci')">UCI Officials</button>
+        <button class="tab" data-tab="admin" id="admin-tab-btn" onclick="topNav('admin')" style="display:none">Admin</button>
+      </nav>
+
+      <div class="topbar-right">
+        <div class="badge" id="session-badge">Guest</div>
+        <div class="badge" id="backend-badge">Race Control</div>
+        <div class="badge accent" id="clock-badge">04:22:18</div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="pane active" id="pane-race">
+        <div class="left-col">
+          <div class="card">
+            <div class="card-head">
+              <h3>Stage Profile</h3>
+              <div class="small">KM <span id="km-marker">142</span></div>
+            </div>
+            <div class="stage-svg-wrap">
+              <svg id="stage-svg" viewBox="0 0 280 90" preserveAspectRatio="none">
+                <path class="elevation-fill" d="M0,80 C20,78 40,70 60,60 C80,50 90,40 110,30 C125,22 135,18 150,14 C165,10 175,15 190,25 C205,35 215,45 230,55 C245,65 260,70 280,72 L280,90 L0,90 Z"></path>
+                <path class="elevation-line" d="M0,80 C20,78 40,70 60,60 C80,50 90,40 110,30 C125,22 135,18 150,14 C165,10 175,15 190,25 C205,35 215,45 230,55 C245,65 260,70 280,72"></path>
+                <line x1="150" y1="8" x2="150" y2="80" class="kom-line"></line>
+                <text x="152" y="12" class="svg-label">KOM</text>
+                <text x="2" y="88" class="svg-label">0</text>
+                <text x="130" y="88" class="svg-label">89km</text>
+                <text x="262" y="88" class="svg-label">178</text>
+                <g id="rider-dots"></g>
+              </svg>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>GC Standings</h3>
+              <div class="small">Overall · Stage 12</div>
+            </div>
+            <div id="gc-list" class="gc-list"></div>
+          </div>
+        </div>
+
+        <div class="main-col">
+          <div class="stat-row">
+            <div class="stat"><div class="stat-value accent" id="rtb-km">36</div><div class="stat-label">km to go</div></div>
+            <div class="stat"><div class="stat-value" id="rtb-speed">44.2</div><div class="stat-label">km/h avg</div></div>
+            <div class="stat"><div class="stat-value danger" id="rtb-gap">1:14</div><div class="stat-label">break gap</div></div>
+            <div class="stat"><div class="stat-value">Stage 12</div><div class="stat-label">Girona → Montserrat</div></div>
+          </div>
+
+          <div class="card hero-card" id="rider-spot">
+            <div class="empty-state">
+              <div class="empty-icon">🚴</div>
+              <div class="empty-title">Select a rider from GC standings</div>
+              <div class="empty-sub">View rider details, bike package and race status.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pane" id="pane-fan">
+        <div class="left-col">
+          <div class="card">
+            <div class="card-head"><h3>Stage Prediction</h3><div class="small">AI model · rider form + course + equipment</div></div>
+            <div class="pred-card">
+              <div class="pred-label">Predicted stage winner</div>
+              <div class="pred-name" id="pred-winner">T. Pogačar</div>
+              <div class="pred-inline"><div class="pred-prob" id="pred-prob">68%</div><div class="small">win probability</div></div>
+              <div id="pred-factors" class="chip-row"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Your Pick</h3><div class="small">Tap a rider</div></div>
+            <div id="pick-row" class="pick-row"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Race Feed</h3><div class="small success">● Live</div></div>
+            <div id="social-feed-list" class="feed-list"></div>
+          </div>
+        </div>
+
+        <div class="main-col">
+          <div class="card" id="why-card"></div>
+          <div class="card">
+            <div class="card-head"><h3>Equipment Performance — 2026 season</h3><div class="small">Stage wins by equipment brand</div></div>
+            <div id="ew-grid" class="equipment-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pane" id="pane-uci">
+        <div class="left-col">
+          <div class="card">
+            <div class="card-head"><h3>Inspection Workflow</h3><div class="small">Login → Event → Scan → Check → Save</div></div>
+            <div class="progress-grid">
+              <div class="flow-step active" id="flow-login">1. Login</div>
+              <div class="flow-step" id="flow-event">2. Event</div>
+              <div class="flow-step" id="flow-scan">3. Scan</div>
+              <div class="flow-step" id="flow-check">4. Check</div>
+              <div class="flow-step" id="flow-save">5. Save</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Recent Inspections</h3><div class="small" id="history-count">0 records</div></div>
+            <div class="filter-row">
+              <input id="history-search" class="input" placeholder="Search tag, rider, team" />
+              <select id="history-filter" class="input">
+                <option value="ALL">All</option>
+                <option value="PASS">Pass</option>
+                <option value="WARNING">Warning</option>
+                <option value="FAIL">Fail</option>
+              </select>
+            </div>
+            <div id="scan-hist-list" class="history-list"></div>
+          </div>
+        </div>
+
+        <div class="main-col">
+          <div class="card uci-card">
+            <div class="card-head">
+              <h3 id="uci-screen-title">Official Access</h3>
+              <div class="small" id="uci-screen-sub">Sign in to continue</div>
+            </div>
+
+            <div class="screen active" id="screen-login">
+              <div class="form-grid">
+                <label><span>Email</span><input id="login-email" class="input" placeholder="alex@racecontrol.com" /></label>
+                <label><span>Password</span><input id="login-password" type="password" class="input" placeholder="Enter password" /></label>
+              </div>
+              <div class="button-row auth-actions">
+                <button type="button" id="btn-signin" class="btn primary">Sign In</button>
+                <button type="button" id="btn-create" class="btn">Create Account</button>
+                <button type="button" id="btn-forgot" class="btn">Forgot Password</button>
+              </div>
+              <div class="small">Use your official account to access inspections.</div>
+            </div>
+
+            <div class="screen" id="screen-event">
+              <div class="form-grid">
+                <label><span>Event</span><select id="event-name" class="input"></select></label>
+                <label><span>Stage</span><select id="event-stage" class="input"></select></label>
+                <label><span>Date</span><input id="event-date" type="date" class="input" /></label>
+                <label><span>Location</span><input id="event-location" class="input" /></label>
+              </div>
+              <div class="button-row">
+                <button type="button" class="btn" id="btn-back-login">Back</button>
+                <button type="button" class="btn primary" id="btn-start-inspection">Start Inspection</button>
+              </div>
+            </div>
+
+            <div class="screen" id="screen-scan">
+              <div class="scan-panel">
+                <div class="nfc-scanner" id="nfc-scanner">
+                  <div class="nfc-icon">📡</div>
+                  <div class="nfc-title" id="nfc-status">Ready to scan</div>
+                  <div class="small" id="nfc-sub">Tap to simulate NFC read</div>
+                </div>
+                <div class="scan-progress"><div class="scan-bar" id="scan-bar"></div></div>
+              </div>
+
+              <div class="form-grid two-up">
+                <label><span>Manual tag entry</span><input id="me-inp" class="input" placeholder="044B536AD71F90" /></label>
+                <label><span>Search rider</span><input id="rider-search" class="input" placeholder="Search rider or team" /></label>
+              </div>
+
+              <div class="button-row">
+                <button type="button" class="btn" id="btn-load-tag">Load Tag</button>
+                <button type="button" class="btn" id="btn-create-record">Create New Record</button>
+              </div>
+
+              <div id="lookup-results" class="lookup-results"></div>
+            </div>
+
+            <div class="screen" id="screen-profile">
+              <div id="profile-card"></div>
+              <div class="button-row">
+                <button type="button" class="btn" id="btn-back-scan">Back</button>
+                <button type="button" class="btn primary" id="btn-start-check">Start Compliance Check</button>
+              </div>
+            </div>
+
+            <div class="screen" id="screen-check">
+              <div id="checklist-root" class="checklist-root"></div>
+              <label class="stack">
+                <span>Inspection notes</span>
+                <textarea id="inspection-notes" class="input textarea" placeholder="Add technical notes, concerns or follow-up..."></textarea>
+              </label>
+              <label class="stack">
+                <span>Photo evidence</span>
+                <input id="photo-input" class="input" type="file" accept="image/*" />
+              </label>
+              <div class="photo-row">
+                <button type="button" class="btn" id="btn-mark-photo">Confirm Photo Added</button>
+                <div id="photo-state" class="small">No photo attached</div>
+              </div>
+              <div class="button-row">
+                <button type="button" class="btn" id="btn-back-profile">Back</button>
+                <button type="button" class="btn primary" id="btn-complete-inspection">Complete Inspection</button>
+              </div>
+            </div>
+
+            <div class="screen" id="screen-save">
+              <div id="summary-root"></div>
+              <div class="button-row">
+                <button type="button" class="btn" id="btn-next-scan">Next Scan</button>
+                <button type="button" class="btn primary" id="btn-save-inspection">Save Inspection</button>
+                <button type="button" class="btn" id="btn-export-json">Export JSON</button>
+                <button type="button" class="btn" id="btn-print">Print PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pane" id="pane-admin">
+        <div class="left-col">
+          <div class="card">
+            <div class="card-head"><h3>Admin Summary</h3><div class="small">Role required: admin</div></div>
+            <div id="admin-summary" class="admin-summary"></div>
+          </div>
+        </div>
+
+        <div class="main-col">
+          <div class="card">
+            <div class="card-head"><h3>All Inspections</h3><div class="small" id="admin-count">0 total</div></div>
+            <div id="admin-inspections" class="history-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script type="module" src="./stitchx.js"></script>
+</body>
+</html>
