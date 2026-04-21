@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("StitchX Backend Running");
+res.json({ status: "ok", service: "stitchX_Radio API" });
 });
 
 app.get("/inspections", (req, res) => {
