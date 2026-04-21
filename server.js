@@ -18,6 +18,14 @@ app.get("/inspections", (req, res) => {
   ]);
 });
 
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.get("/stream", (req, res) => {
+  res.redirect("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
